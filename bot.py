@@ -1,19 +1,32 @@
-<?php
-$BOT_TOKEN = "8513005164:AAHSB3MEuhcWAZSESON3gc8JfIYgY_dCDIk";
-$API = "https://api.telegram.org/bot$BOT_TOKEN";
+from flask import Flask, request
+import requests
+import json
 
-$update = json_decode(file_get_contents("php://input"), true);
+BOT_TOKEN = "8513005164:AAHSB3MEuhcWAZSESON3gc8JfIYgY_dCDIk"
+API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
-if (!isset($update["channel_post"])) {
-    exit;
-}
+app = Flask(__name__)
 
-$chat_id = $update["channel_post"]["chat"]["id"];
-$message_id = $update["channel_post"]["message_id"];
+@app.route("/", methods=["POST"])
+def webhook():
+    update = request.get_json()
 
-// 👉 yahi tumhara reaction url
-$reaction_url = "https://reaction.xo.je/reaction.php?chat_id=$chat_id&msg_id=$message_id";
+    # Sirf channel post handle kare
+    if "channel_post" not in update:
+        return "ok"
 
-// call reaction api
-file_get_contents($reaction_url);
-?>
+    chat_id = update["channel_post"]["chat"]["id"]
+    message_id = update["channel_post"]["message_id"]
+
+    # tumhara reaction url
+    reaction_url = f"https://reaction.xo.je/reaction.php?chat_id={chat_id}&msg_id={message_id}"
+
+    try:
+        requests.get(reaction_url, timeout=5)
+    except:
+        pass
+
+    return "ok"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
