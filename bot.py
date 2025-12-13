@@ -2,7 +2,7 @@ from flask import Flask, request
 import requests
 import json
 
-BOT_TOKEN = "8513005164:AAHSB3MEuhcWAZSESON3gc8JfIYgY_dCDIk"
+BOT_TOKEN = "8419880200:AAGVtEUJzGrLC0aHBY8jLqdbQZVc_ANpRYg"
 API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 app = Flask(__name__)
